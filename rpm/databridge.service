@@ -1,0 +1,12 @@
+[Unit]
+Description=Databridge Example Service
+After=network.target
+
+[Service]
+Type=simple
+User=databridge
+ExecStart=/opt/psale/databridge/bin/databridge /etc/databridge/databridge-example.yml
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

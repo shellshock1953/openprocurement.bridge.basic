@@ -1,0 +1,4 @@
+[submodule "openprocurement-client"]
+	path = src/openprocurement-client
+	url = https://github.com/openprocurement/openprocurement.client.python
+	branch = registry

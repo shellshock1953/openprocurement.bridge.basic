@@ -1,3 +1,4 @@
+
 %define _build_id_links none
 
 %define __spec_prep_post true
@@ -15,9 +16,9 @@
 
 %define component databridge
 %define user psale
-%define source_build_path /opt/psale/build
-%define source_unit_file /opt/psale/build/rpm/%{component}.service
-%define source_path_config /opt/psale/build/etc/%{component}.yml
+%define source_build_path /opt/psale/%{component}
+%define source_unit_file /opt/psale/%{component}/rpm/%{component}.service
+%define source_path_config /opt/psale/%{component}/etc/%{component}.yml
 %define working_dir /opt/psale/%{component}
 
 Name: %{component}
@@ -42,6 +43,7 @@ Requires: systemd python2-libs libyaml libffi
 no description given
 
 %prep
+# noop
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{working_dir}
 mkdir -p %{buildroot}/usr/lib/systemd/system/
@@ -77,4 +79,3 @@ exit 0
 %config(noreplace) /etc/%{component}
 
 %changelog
-

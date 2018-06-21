@@ -1,4 +1,5 @@
-%define debug_package %{nil}
+%define _build_id_links none
+
 %define __spec_prep_post true
 %define __spec_prep_pre true
 %define __spec_build_post true
@@ -41,7 +42,6 @@ Requires: systemd python2-libs libyaml libffi
 no description given
 
 %prep
-# noop
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{working_dir}
 mkdir -p %{buildroot}/usr/lib/systemd/system/
@@ -72,9 +72,9 @@ exit 0
 
 %files
 %defattr(-,%{user},%{user},-)
-%config(noreplace) /usr/lib/systemd/system/%{component}.service
-%config(noreplace) /etc/%{component}
 %attr(0755,%{user},%{user}) %{working_dir}
+%attr(-,root,root) %{_unitdir}/%{component}.service
+%config(noreplace) /etc/%{component}
 
 %changelog
 

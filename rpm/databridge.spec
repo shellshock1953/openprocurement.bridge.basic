@@ -1,3 +1,10 @@
+# daemon-reload?
+# uninstall not rm bin/* + need to destroy virtualenv?
+# /var/log/databridge folder + perm
+# general perm + user + group?
+# systemd journal same scope for all op? (to be able to log all op?)
+# ???
+# RM journal from conf !
 
 %define _build_id_links none
 
@@ -16,9 +23,9 @@
 
 %define component databridge
 %define user psale
-%define source_build_path /opt/psale/%{component}
-%define source_unit_file /opt/psale/%{component}/rpm/%{component}.service
-%define source_path_config /opt/psale/%{component}/etc/%{component}.yml
+%define source_tar_path ./%{component}.tar.gz
+%define source_unit_file ./rpm/%{component}.service
+%define source_path_config ./etc/%{component}.yml
 %define working_dir /opt/psale/%{component}
 
 Name: %{component}
@@ -26,7 +33,7 @@ Version: 0.1
 Release: %{release}
 Summary: no description given
 AutoReqProv: no
-BuildRoot: /root/rpm
+BuildRoot: ./
 
 Prefix: /
 
@@ -36,8 +43,8 @@ Vendor: Quintagroup, Ltd.
 URL: http://quintagroup.com/
 Packager: <info@quintagroup.com>
 
-BuildRequires: systemd
-Requires: systemd python2-libs libyaml libffi
+# BuildRequires: systemd python2-devel automake gcc redhat-rpm-config python2-virtualenv
+Requires: systemd python2 python2-virtualenv
 
 %description
 no description given
@@ -45,10 +52,10 @@ no description given
 %prep
 # noop
 rm -rf %{buildroot}
-mkdir -p %{buildroot}%{working_dir}
+mkdir -p %{buildroot}%{working_dir}/whls/
 mkdir -p %{buildroot}/usr/lib/systemd/system/
 mkdir -p %{buildroot}/etc/%{component}/
-cp -r %{source_build_path}/*  %{buildroot}/%{working_dir}/
+cp %{source_tar_path}  %{buildroot}/%{working_dir}/whls/
 cp %{source_unit_file} %{buildroot}/usr/lib/systemd/system/%{component}.service
 cp %{source_path_config} %{buildroot}/etc/%{component}/
 
@@ -64,6 +71,13 @@ cp %{source_path_config} %{buildroot}/etc/%{component}/
 %pre
 getent group %{user} >/dev/null || groupadd -r %{user}
 getent passwd %{user} >/dev/null || useradd -r -g %{user} -s /sbin/nologin %{user}
+
+cd %{working_dir}
+virtualenv --clear --always-copy %{working_dir}
+tar xvf whls/%{component}.tar.gz -C whls/
+rm whls/%{component}.tar.gz
+bin/pip install --no-index -f whls whls/*.whl
+bin/pip list
 exit 0
 
 %post

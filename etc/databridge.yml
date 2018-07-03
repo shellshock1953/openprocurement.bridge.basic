@@ -12,8 +12,8 @@ main:
   resource: lots
   resource_items_limit: 100
   resource_items_queue_size: 100
-  # resources_api_server: https://lb.api-sandbox.ea2.openprocurement.net
-  # resources_api_version: 2.3
+  resources_api_server: https://lb.api-sandbox.ea2.openprocurement.net
+  resources_api_version: 2.3
   retries_count: 10
   retrievers_params:
     down_requests_sleep: 20
@@ -52,17 +52,11 @@ handlers:
     formatter: simple
     level: INFO
     stream: ext://sys.stdout
-  journal:
-    SYSLOG_IDENTIFIER: DATABRIDGE
-    class: ExtendedJournalHandler.ExtendedJournalHandler
-    formatter: simple
-    level: INFO
 
 loggers:
   logger_exc_logger:
     handlers:
     - console
-    - journal
     level: ERROR
     propagate: 0
     qualname: exc_logger
